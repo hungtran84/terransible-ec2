@@ -9,9 +9,9 @@ provider "aws" {
 resource "aws_instance" "web" {
   instance_type     = "t2.micro"
   availability_zone = "us-east-2a"
-  ami               = "ami-00c03f7f7f2ec15c3"
+  ami               = "ami-06858f33bbe384bbb"
   vpc_security_group_ids = ["${aws_security_group.sg.id}"]
-  key_name      = "test"
+  key_name      = "mykey"
   tags = {
     Name = "web"
   }
