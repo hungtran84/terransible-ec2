@@ -15,6 +15,23 @@ resource "aws_instance" "web" {
   tags = {
     Name = "web"
   }
+
+  connection {
+    host = "${self.public_ip}"
+    user = "admin"
+    private_key = "${file("${var.private_key_path}")}"
+  }
+
+  provisioner "ansible" {
+    plays {
+        playbook {
+          file_path = "../ansible/apache.yml"
+        }
+        hosts = ["${self.public_ip}"]
+        become = "true"
+    }
+}
+
 }
 
 resource "aws_security_group" "sg" {  
@@ -40,4 +57,14 @@ resource "aws_security_group" "sg" {
     protocol    = "tcp"    
     cidr_blocks = ["0.0.0.0/0"]  
   }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
+
+
+
